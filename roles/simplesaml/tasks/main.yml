@@ -1,0 +1,33 @@
+- name: Install SimpleSAMLphp
+  hosts: node
+  become: yes
+  
+  tasks:
+  - name: Download SimpleSAMLphp
+    get_url:
+      url: https://simplesamlphp.org/download?latest
+      dest: /tmp/simplesamlphp.tar.gz
+      mode: 0644
+
+  - name: Extract SimpleSAMLphp
+    unarchive:
+      src: /tmp/simplesamlphp.tar.gz
+      dest: /var/www/
+      remote_src: yes
+
+  - name: Remove downloaded archive
+    file:
+      path: /tmp/simplesamlphp.tar.gz
+      state: absent
+
+  - name: Rename SimpleSAMLphp directory
+    command: mv /var/www/simplesamlphp-* /var/www/simplesamlphp
+    args:
+      creates: /var/www/simplesamlphp
+
+  - name: Copy default configuration
+    command: cp /var/www/simplesamlphp/config-templates/config.php /var/www/simplesamlphp/config/config.php
+    args:
+      creates: /var/www/simplesamlphp/config/config.php
+
+
