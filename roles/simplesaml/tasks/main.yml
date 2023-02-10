@@ -1,11 +1,15 @@
-- name: Install SimpleSAMLphp
-  hosts: node
-  become: yes
-  
-  tasks:
+  - name: Install PHP and required modules
+    yum:
+      name:
+        - php
+        - php-mbstring
+        - php-xml
+        - mod_php
+      state: latest
+
   - name: Download SimpleSAMLphp
     get_url:
-      url: https://simplesamlphp.org/download?latest
+      url: {{ simplesaml_url  }} 
       dest: /tmp/simplesamlphp.tar.gz
       mode: 0644
 
@@ -25,9 +29,76 @@
     args:
       creates: /var/www/simplesamlphp
 
-  - name: Copy default configuration
-    command: cp /var/www/simplesamlphp/config-templates/config.php /var/www/simplesamlphp/config/config.php
-    args:
-      creates: /var/www/simplesamlphp/config/config.php
+  - name: Create config directory for SimpleSAMLPHP
+    file:
+      path: /etc/xdmod/simplesamlphp/config
+      state: directory
+      mode: 0755
 
+  - name: Create metadata directory for SimpleSAMLPHP
+    file:
+      path: /etc/xdmod/simplesamlphp/metadata
+      state: directory
+      mode: 0755
 
+  - name: Create cert directory for SimpleSAMLPHP
+    file:
+      path: /etc/xdmod/simplesamlphp/cert
+      state: directory
+      mode: 0755
+
+  - name: Copy saml.pem file
+    copy:
+      src: files/saml.pem
+      dest: /etc/xdmod/simplesamlphp/cert/saml.pem
+      mode: 0644
+
+  - name: Copy saml.crt file
+    copy:
+      src: files/saml.crt
+      dest: /etc/xdmod/simplesamlphp/cert/saml.crt
+      mode: 0644
+
+  - name: Copy config.php
+    copy:
+      src: files/config.php
+      dest: /etc/xdmod/simplesamlphp/config/config.php
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Copy authsources.php
+    copy:
+      src: files/authsources.php
+      dest: /etc/xdmod/simplesamlphp/config/authsources.php
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Copy saml20-idp-remote.php
+    copy:
+      src: files/saml20-idp-remote.php
+      dest: /etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php
+      owner: root
+      group: root
+      mode: 0644
+
+  - name: Append configuration to the Apache file
+    lineinfile:
+      path: /etc/httpd/conf.d/xdmod.conf
+      line: |
+        SetEnv SIMPLESAMLPHP_CONFIG_DIR /etc/xdmod/simplesamlphp/config
+        Alias /simplesaml /usr/share/xdmod/vendor/simplesamlphp/simplesamlphp/www
+        <Directory /usr/share/xdmod/vendor/simplesamlphp/simplesamlphp/www>
+            Options FollowSymLinks
+            AllowOverride All
+            <IfModule mod_authz_core.c>
+                Require all granted
+            </IfModule>
+        </Directory>
+      insertafter: '</Directory>$'
+
+  - name: Restart Apache service
+    service:
+      name: httpd
+      state: restarted

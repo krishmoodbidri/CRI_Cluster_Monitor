@@ -76,4 +76,9 @@
 
   hierarchy_file_path: "/home/centos/depttoschoolmapping.csv"
   group_to_hierarchy_file_path: "/home/centos/cheahausers.csv"
-  
+
+# Simplesaml related
+
+   enable_simplesaml: false
+   simplesaml_url: https://simplesamlphp.org/download?latest 
+ 
