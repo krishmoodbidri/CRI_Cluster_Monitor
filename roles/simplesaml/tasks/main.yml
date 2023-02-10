@@ -49,19 +49,19 @@
 
   - name: Copy saml.pem file
     copy:
-      src: files/saml.pem
+      src: saml.pem
       dest: /etc/xdmod/simplesamlphp/cert/saml.pem
       mode: 0644
 
   - name: Copy saml.crt file
     copy:
-      src: files/saml.crt
+      src: saml.crt
       dest: /etc/xdmod/simplesamlphp/cert/saml.crt
       mode: 0644
 
   - name: Copy config.php
     copy:
-      src: files/config.php
+      src: config.php
       dest: /etc/xdmod/simplesamlphp/config/config.php
       owner: root
       group: root
@@ -69,7 +69,7 @@
 
   - name: Copy authsources.php
     copy:
-      src: files/authsources.php
+      src: authsources.php
       dest: /etc/xdmod/simplesamlphp/config/authsources.php
       owner: root
       group: root
@@ -77,7 +77,7 @@
 
   - name: Copy saml20-idp-remote.php
     copy:
-      src: files/saml20-idp-remote.php
+      src: saml20-idp-remote.php
       dest: /etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php
       owner: root
       group: root
