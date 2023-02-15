@@ -9,7 +9,7 @@
 
   - name: Download SimpleSAMLphp
     get_url:
-      url: {{ simplesaml_url  }} 
+      url: "{{ simplesaml_url }}" 
       dest: /tmp/simplesamlphp.tar.gz
       mode: 0644
 
