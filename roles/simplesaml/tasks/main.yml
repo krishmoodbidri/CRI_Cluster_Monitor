@@ -8,7 +8,7 @@
       - mod_php
     state: latest
 
-- name: Extract SimpleSAMLphp archive
+- name: Download and Extract SimpleSAMLphp
   unarchive:
     remote_src: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
     dest: /var/www/
