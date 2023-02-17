@@ -40,6 +40,14 @@
     - { src: "authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
     - { src: "saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
 
+- name: Create log file
+  file:
+    path: "/var/log/simplesaml/simplesamlphp.log"
+    state: touch
+    mode: '0664'
+    owner: apache
+    group: apache
+
 - name: Restart service apache
   service:
     name: http
