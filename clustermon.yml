@@ -7,4 +7,4 @@
    - {role: job_archiver, tags: job_archiver, when: enable_job_archiver}
    - {role: openxdmod, tags: openxdmod, when: enable_openxdmod}
    - {role: supremm, tags: supremm, when: enable_supremm}
-   - {role: simplesaml, tags: enable_simplesaml }
+   - {role: simplesaml, tags: simplesaml, when: enable_simplesaml }
