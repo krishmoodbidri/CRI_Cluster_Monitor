@@ -79,6 +79,5 @@
 
 # Simplesaml related
 
-   enable_simplesaml: false
-   simplesaml_url: https://simplesamlphp.org/download?latest 
+  enable_simplesaml: true 
  
