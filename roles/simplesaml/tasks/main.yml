@@ -8,13 +8,22 @@
       - mod_php
     state: latest
 
-- name: Download and Extract SimpleSAMLphp
-  unarchive:
-    remote_src: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
-    dest: /var/www/
 
-- name: Rename SimpleSAMLphp directory
-  command: mv /var/www/simplesamlphp-* /var/www/simplesamlphp
+- name: Download SimpleSAMLphp to /tmp dir
+  get_url:
+    url: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
+    dest: /tmp/simplesamlphp/
+    mode: '0755'
+
+- name: Extract SimpleSAMLphp
+  unarchive:
+    src: /tmp/simplesamlphp/simplesamlphp-1.19.7.tar.gz
+    dest: /var/www/
+    remote_src: true
+
+#- name: Rename SimpleSAMLphp directory
+#  become: true
+#  command: mv /var/www/simplesamlphp* /var/www/simplesamlphp
 
 - name: Create config, metadata, and cert directories for SimpleSAMLPHP
   become: yes
