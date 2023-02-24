@@ -57,8 +57,9 @@
     owner: apache
     group: apache
 
-- name: Restart service apache
-  service:
-    name: http
+- name: Restart httpd service
+  become: true
+  systemd:
+    name: httpd.service
     state: restarted
 
