@@ -8,17 +8,27 @@
       - mod_php
     state: latest
 
+- name: Create SimpleSAMLphp directory in /tmp and delete its contents if it exists
+  file:
+    path: /tmp/simplesamlphp/
+    state: directory
+    mode: '0755'
+    recurse: yes
+    # This option will remove all files and directories inside /tmp/simplesamlphp/ before creating it.
+
 - name: Download SimpleSAMLphp to /tmp dir
   get_url:
-    url: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
+    url: "{{ simplesaml_url }}"
     dest: /tmp/simplesamlphp/
     mode: '0755'
 
 - name: Extract SimpleSAMLphp
   unarchive:
-    src: /tmp/simplesamlphp/simplesamlphp-1.19.7.tar.gz
+    src: "{{ lookup('fileglob', '/tmp/simplesamlphp/*.tar.gz') }}"
     dest: /var/www/
     remote_src: true
+    extra_opts: [--strip-components=1]
+  become: true
 
 - name: Create config, metadata, and cert directories for SimpleSAMLPHP
   become: yes
