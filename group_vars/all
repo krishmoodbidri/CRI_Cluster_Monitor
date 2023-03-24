@@ -38,6 +38,10 @@
   xdmod_ingestor_start_date: "date +'\\%F'"
   xdmod_ingestor_end_date: "date -d 'next day' +'\\%F'"
 
+  xdmod_server_name: "xdmod.example.com"
+  xdmod_ssl_certificate_file: "/etc/pki/tls/certs/xdmod.crt"
+  xdmod_ssl_certificate_key_file: "/etc/pki/tls/private/xdmod.key"
+
 # SUPReMM
 
   enable_supremm: false
