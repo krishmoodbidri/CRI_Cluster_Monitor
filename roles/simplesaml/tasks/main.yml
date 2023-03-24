@@ -55,8 +55,12 @@
 
 - name: Copy config file from templates to destination
   template:
-    src: config.php
+    src: config.php.j2
     dest: /etc/xdmod/simplesamlphp/config/config.php
+  vars:
+    trusted_url_domains: "['xdmod.rc.uab.edu']",
+    session_cookie_domain: "{{ trusted_url_domains }}",
+    language_cookie_domain: "{{ trusted_url_domains }}"
 
 - name: Create log directory
   file:
