@@ -58,6 +58,14 @@
     src: config.php
     dest: /etc/xdmod/simplesamlphp/config/config.php
 
+- name: Create log directory
+  file:
+    path: "/var/log/simplesaml"
+    state: directory
+    mode: '0775'
+    owner: apache
+    group: apache
+
 - name: Create log file
   file:
     path: "/var/log/simplesaml/simplesamlphp.log"
