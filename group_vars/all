@@ -42,6 +42,10 @@
   xdmod_ssl_certificate_file: "/etc/pki/tls/certs/xdmod.crt"
   xdmod_ssl_certificate_key_file: "/etc/pki/tls/private/xdmod.key"
 
+  ServerName: ""
+  SSLCertificateFile: ""
+  SSLCertificateKeyFile: ""
+
 # SUPReMM
 
   enable_supremm: false
