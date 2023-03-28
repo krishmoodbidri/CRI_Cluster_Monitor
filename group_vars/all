@@ -37,6 +37,10 @@
   xdmod_shredder_end_time: "date +'\\%FT\\%T'"
   xdmod_ingestor_start_date: "date +'\\%F'"
   xdmod_ingestor_end_date: "date -d 'next day' +'\\%F'"
+  
+  ServerName: ""
+  SSLCertificateFile: ""
+  SSLCertificateKeyFile: ""
 
 # SUPReMM
 
