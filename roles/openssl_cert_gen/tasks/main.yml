@@ -1,4 +1,4 @@
----
+roles/openssl_cert_gen/tasks/main.yml---
 - name: Generate an OpenSSL private key.
   openssl_privatekey:
     path: /etc/ssl/certs/ansible_ssl.pem
@@ -15,3 +15,14 @@
     privatekey_path: /etc/ssl/certs/ansible_ssl.pem
     csr_path: /etc/ssl/certs/ansible_ssl.csr
     provider: selfsigned
+
+- name: xdmod httpd conf
+  template:
+    src: xdmod.conf
+    dest: /etc/httpd/conf.d/xdmod.conf
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes
