@@ -1,4 +1,4 @@
-roles/openssl_cert_gen/tasks/main.yml---
+---
 - name: Generate an OpenSSL private key.
   openssl_privatekey:
     path: /etc/ssl/certs/ansible_ssl.pem
