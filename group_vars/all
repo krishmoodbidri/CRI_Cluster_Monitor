@@ -76,4 +76,7 @@
 
   hierarchy_file_path: "/home/centos/depttoschoolmapping.csv"
   group_to_hierarchy_file_path: "/home/centos/cheahausers.csv"
+
+# Openssl_Cert_Gen related
   
+  enable openssl_cert_gen: false
