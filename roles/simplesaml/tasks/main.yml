@@ -59,6 +59,12 @@
     dest: /etc/xdmod/simplesamlphp/config/config.php
     mode: 0644
 
+- name: Add [authentication] section to portal_settings.ini
+  replace:
+    path: /etc/xdmod/portal_settings.ini
+    regexp: '(\\[auto_login\\])'
+    replace: '\n[authentication]\nsource = "default-sp"\n\n\1'
+
 - name: Create log directory
   file:
     path: "/var/log/simplesaml"
