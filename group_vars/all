@@ -79,5 +79,5 @@
 
 # Openssl_Cert_Gen related
   
-  enable openssl_cert_gen: false
-  ServerName: example.xyz
+  openssl_cert_gen: false
+  ServerName: ''
