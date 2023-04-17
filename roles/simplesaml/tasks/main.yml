@@ -1,4 +1,4 @@
----
+roles/simplesaml/tasks/main.yml---
 - name: Install PHP and required modules
   yum:
     name:
@@ -60,10 +60,13 @@
     mode: 0644
 
 - name: Add [authentication] section to portal_settings.ini
-  replace:
+  blockinfile:
     path: /etc/xdmod/portal_settings.ini
-    regexp: '(\\[auto_login\\])'
-    replace: '\n[authentication]\nsource = "default-sp"\n\n\1'
+    block: |
+      [authentication]
+      source = "default-sp"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+    insertafter: '^basic_auth = "on"$'
 
 - name: Create log directory
   file:
