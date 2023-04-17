@@ -21,8 +21,8 @@ $config = array(
     'authproc' => array(
         40 => array(
           'class' => 'core:AttributeMap',
-          'urn:oid:0.9.2342.19200300.100.1.3' => 'username',
-          'urn:oasis:names:tc:SAML:attribute:subject-id' => 'email_address',
+          'urn:oid:0.9.2342.19200300.100.1.1' => 'username',
+          'urn:oid:0.9.2342.19200300.100.1.3' => 'email_address',
           'urn:oid:2.5.4.42' => 'first_name',
           'urn:oid:2.5.4.4' => 'last_name',
         ),
