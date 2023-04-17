@@ -62,6 +62,10 @@
 
   archive_out_dir: "/home/pcp/job_summary_staging"
 
+# Selinix Permissive related
+
+  enable_selinix_permissive: false
+
 # Job_archiver related
 
   enable_job_archiver: false
