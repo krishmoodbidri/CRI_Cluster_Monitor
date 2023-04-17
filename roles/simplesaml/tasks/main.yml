@@ -1,4 +1,4 @@
-roles/simplesaml/tasks/main.yml---
+---
 - name: Install PHP and required modules
   yum:
     name:
