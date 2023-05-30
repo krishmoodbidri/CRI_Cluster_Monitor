@@ -10,7 +10,9 @@
             "enabled": true,
             "pcp_log_dir": "{{ pcp_log_dir }}",
             "hostname_mode": "hostname",
-            "script_dir": "{{ job_script_dir }}"
+            "batchscript": {
+                "path": "{{ job_script_dir }}",
+                "timestamp_mode": "start"
         }
     },
     "outputdatabase": {

@@ -1,0 +1,28 @@
+---
+- name: Generate an OpenSSL private key.
+  openssl_privatekey:
+    path: /etc/pki/tls/private/ansible_ssl.pem
+
+- name: Generate a Certificate Signing Request (CSR)
+  openssl_csr:
+    privatekey_path: /etc/pki/tls/private/ansible_ssl.pem
+    common_name: example.com
+    path: /etc/pki/tls/private/ansible_ssl.csr
+
+- name: Create a self-signed OpenSSL certificate
+  openssl_certificate:
+    path: /etc/pki/tls/private/ansible_ssl.crt 
+    privatekey_path: /etc/pki/tls/private/ansible_ssl.pem
+    csr_path: /etc/pki/tls/private/ansible_ssl.csr
+    provider: selfsigned
+
+- name: xdmod httpd conf
+  template:
+    src: xdmod.conf
+    dest: /etc/httpd/conf.d/xdmod.conf
+
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted
+    enabled: yes

@@ -7,4 +7,6 @@
    - {role: job_archiver, tags: job_archiver, when: enable_job_archiver}
    - {role: openxdmod, tags: openxdmod, when: enable_openxdmod}
    - {role: selinix_permissive, tags: selinix_permissive, when: enable_selinix_permissive}
+   - {role: openssl_cert_gen, tags: openssl_cert_gen, when: openssl_cert_gen}
    - {role: supremm, tags: supremm, when: enable_supremm}
+   - {role: simplesaml, tags: simplesaml, when: enable_simplesaml}

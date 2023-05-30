@@ -25,8 +25,15 @@
      - "php-pear-MDB2"
      - "php-pear-MDB2-Driver-mysql"
      - "php-xml"
+     - "php-mbstring"
+     - "php-pecl-apcu"
      - "bzip2"
      - "python-pip"
+     - "libreoffice"
+     - "perl-Image-ExifTool"
+     - "jq" 
+     - "librsvg2-tools"
+     - "chromium-headless"
 
  - name: install pexpect
    command: pip install -U pip
@@ -123,47 +130,19 @@
    command: acl-import
    when: xdmod_version is version('8.0.0', operator='<=', strict=True)
 
- - name: Drop and recreate databases
-   expect:
-     echo: yes
-     command: xdmod-setup
-     responses:
-       (.*)Do you want to continue(.*): "yes"
-       (.*)Select an option(.*):
-         - "2"
-         - "q"
-       (.*)DB Hostname or IP(.*): "localhost"
-       (.*)DB Port(.*): "3306"
-       (.*)DB Username(.*): "xdmod"
-       (.*)DB Password(.*): "{{ xdmod_db_pass }}"
-       (.*)(confirm) DB Password(.*): "{{ xdmod_db_pass }}"
-       (.*)DB Admin Username(.*): "root"
-       (.*)DB Admin Password(.*): ""
-       (.*)(confirm) DB Admin Password(.*): ""
-       (.*)Drop and recreate database(.*): "yes"
-       (.*)Overwrite config file(.*): "yes"
-       (.*)Press ENTER to continue(.*): ""
-       (.*)Do you want to see the output(.*): "no"
-       (.*)Press Any Key To Continue(.*): ""
-   register: result
-   failed_when: "'The script executed without error.' not in result.stdout"
-
-   #- debug:
-   #  var: result
-
  - name: Import hierarchy CSV into XDMOD
    command: xdmod-import-csv -t hierarchy -i {{ hierarchy_file_path }}
-   when: hierarchy_file_path is defined
+   when: hierarchy_file_path is defined and hierarchy_file_path != ""
 
  - name: Provide a mapping from your user groups to the hierarchy items
    command: xdmod-import-csv -t group-to-hierarchy -i {{ group_to_hierarchy_file_path }}
-   when: group_to_hierarchy_file_path is defined
+   when: group_to_hierarchy_file_path is defined and group_to_hierarchy_file_path != ""
 
  - name: Run ingestor to ingest hierarchies into the tables
-   command: xdmod-ingestor --last-modified-start-date `date +'%F'`
+   command: xdmod-ingestor --last-modified-start-date "{{ ansible_date_time.date }}" 
 
  - name: shred slurm records
-   command: xdmod-slurm-helper -r {{ slurm_cluster_name }}
+   command: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}" 
 
  - name: ingest slurm records
    command: xdmod-ingestor
@@ -173,7 +152,7 @@
      hour: 0
      minute: 10
      state: present
-     job: "xdmod-slurm-helper -r {{ slurm_cluster_name }}"
+     job: "sacct --allusers --parsable2 --noheader --allocations --duplicates --clusters {{ slurm_cluster_name }} --format jobid,jobidraw,cluster,partition,account,group,gid,user,uid,submit,eligible,start,end,elapsed,exitcode,state,nnodes,ncpus,reqcpus,reqmem,reqtres,alloctres,timelimit,nodelist,jobname --starttime {{ xdmod_shredder_start_time }} --end-time {{ xdmod_shredder_end_time }} > {{ sacct_log_file_path }} && xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}"
    when: enable_supremm == false
 
  - name: create xdmod ingestor cron job
@@ -181,7 +160,7 @@
      hour: 0
      minute: 30
      state: present
-     job: "xdmod-ingestor"
+     job: "xdmod-ingestor --start-date {{ xdmod_ingestor_start_date }} --end-date {{ xdmod_ingestor_end_date }}"
    when: enable_supremm == false
 
  - name: reload httpd

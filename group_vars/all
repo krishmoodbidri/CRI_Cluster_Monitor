@@ -7,12 +7,12 @@
   ganglia_grid_name: "ExampleSite"
   ganglia_public_name: "ganglia.localdomain"
 
-  enable_openxdmod: false
+  enable_openxdmod: true
 
   xdmod_public_name: "ohpc.novalocal"
 
-  xdmod_version: 8.1.2
-  xdmod_url: "https://github.com/ubccr/xdmod/releases/download/v8.1.2/xdmod-8.1.2-1.0.el7.noarch.rpm"
+  xdmod_version: 9.5.0
+  xdmod_url: "https://github.com/ubccr/xdmod/releases/download/v9.5.0/xdmod-9.5.0-1.0.el7.noarch.rpm"
 
   slurm_cluster_name: "ohpc" #for OpenXDMoD to parse SLURM accounting
   xdmod_long_cluster_name: "OHPC"
@@ -38,13 +38,15 @@
   xdmod_ingestor_start_date: "date +'\\%F'"
   xdmod_ingestor_end_date: "date -d 'next day' +'\\%F'"
 
+  sacct_log_file_path: ""
+
 # SUPReMM
 
-  enable_supremm: false
+  enable_supremm: false 
 
-  supremm_url: https://github.com/ubccr/xdmod-supremm/releases/download/v8.1.0/xdmod-supremm-8.1.0-1.0.el7.noarch.rpm
+  supremm_url: "https://github.com/ubccr/xdmod-supremm/releases/download/v9.5.0/xdmod-supremm-9.5.0-1.0.el7.noarch.rpm" 
 
-  supremm_job_summarization_url: https://github.com/ubccr/supremm/releases/download/1.2.0/supremm-1.2.0-1.el7.x86_64.rpm
+  supremm_job_summarization_url: "https://github.com/ubccr/supremm/releases/download/1.4.1/supremm-1.4.1-1.el7.src.rpm"
 
   data_source: "pcp"
 
@@ -78,6 +80,16 @@
 
 # Hierarchy related
 
-  hierarchy_file_path: "/home/centos/depttoschoolmapping.csv"
-  group_to_hierarchy_file_path: "/home/centos/cheahausers.csv"
+  hierarchy_file_path: ""
+  group_to_hierarchy_file_path: ""
+
+# Openssl_Cert_Gen related
   
+  openssl_cert_gen: false
+  ServerName: ''
+
+# Simplesaml  related  
+
+  enable_simplesaml: false
+  simplesaml_url: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
+  trusted_url_domains: ''
