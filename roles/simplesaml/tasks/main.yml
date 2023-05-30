@@ -1,0 +1,92 @@
+---
+- name: Install PHP and required modules
+  yum:
+    name:
+      - php
+      - php-mbstring
+      - php-xml
+      - mod_php
+    state: latest
+
+- name: Create SimpleSAMLphp directory in /tmp and delete its contents if it exists
+  file:
+    path: /tmp/simplesamlphp/
+    state: directory
+    mode: '0755'
+    recurse: yes
+    # This option will remove all files and directories inside /tmp/simplesamlphp/ before creating it.
+
+- name: Download SimpleSAMLphp to /tmp dir
+  get_url:
+    url: "{{ simplesaml_url }}"
+    dest: /tmp/simplesamlphp/
+    mode: '0755'
+
+- name: Extract SimpleSAMLphp
+  unarchive:
+    src: "{{ lookup('fileglob', '/tmp/simplesamlphp/*.tar.gz') }}"
+    dest: /var/www/
+    remote_src: true
+    extra_opts: [--strip-components=1]
+  become: true
+
+- name: Create config, metadata, and cert directories for SimpleSAMLPHP
+  become: yes
+  file:
+    path: /etc/xdmod/simplesamlphp/{{ item }}
+    state: directory
+    mode: '0755'
+  loop:
+    - config
+    - metadata
+    - cert
+
+- name: Copy all the cert and metadata files to appropriate destinations
+  become: yes
+  copy:
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    mode: '0644'
+  loop:
+    - { src: "saml.pem", dest: "/etc/xdmod/simplesamlphp/cert/saml.pem" }
+    - { src: "saml.crt", dest: "/etc/xdmod/simplesamlphp/cert/saml.crt" }
+    - { src: "authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
+    - { src: "saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
+
+- name: Copy config file from templates to destination
+  template:
+    src: config.php
+    dest: /etc/xdmod/simplesamlphp/config/config.php
+    mode: 0644
+
+- name: Add [authentication] section to portal_settings.ini
+  blockinfile:
+    path: /etc/xdmod/portal_settings.ini
+    block: |
+      [authentication]
+      source = "default-sp"
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - DO NOT EDIT"
+    insertafter: '^basic_auth = "on"$'
+
+- name: Create log directory
+  file:
+    path: "/var/log/simplesaml"
+    state: directory
+    mode: '0775'
+    owner: apache
+    group: apache
+
+- name: Create log file
+  file:
+    path: "/var/log/simplesaml/simplesamlphp.log"
+    state: touch
+    mode: '0664'
+    owner: apache
+    group: apache
+
+- name: Restart httpd service
+  become: true
+  systemd:
+    name: httpd.service
+    state: restarted
+

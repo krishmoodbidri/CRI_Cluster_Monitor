@@ -8,3 +8,4 @@
    - {role: openxdmod, tags: openxdmod, when: enable_openxdmod}
    - {role: openssl_cert_gen, tags: openssl_cert_gen, when: openssl_cert_gen}
    - {role: supremm, tags: supremm, when: enable_supremm}
+   - {role: simplesaml, tags: simplesaml, when: enable_simplesaml}
