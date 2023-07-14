@@ -40,6 +40,12 @@
 
   sacct_log_file_path: ""
 
+# Xdmod SSO
+
+  uab_sso: "false"
+  s3_shibboleth_bucket_name: uab-shib
+  s3_shibboleth_object_name: shib_conf.tar.gz
+
 # SUPReMM
 
   enable_supremm: false 
