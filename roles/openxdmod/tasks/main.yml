@@ -35,8 +35,10 @@
      - "librsvg2-tools"
      - "chromium-headless"
 
- - name: install pexpect
+ - name: upgrade pip
    command: pip install -U pip
+   
+ - name: install pexpect
    command: pip install pexpect
 
  - name: get phantomJS
