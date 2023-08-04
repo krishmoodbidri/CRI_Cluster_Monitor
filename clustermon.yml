@@ -9,5 +9,5 @@
    - {role: selinix_permissive, tags: selinix_permissive, when: enable_selinix_permissive}
    - {role: openssl_cert_gen, tags: openssl_cert_gen, when: openssl_cert_gen}
    - {role: supremm, tags: supremm, when: enable_supremm}
-   - {role: simplesaml, tags: simplesaml, when: when: enable_simplesaml && !uab_sso}
-   - {role: simplesaml_uab_sso, tags: simplesaml_uab_sso, when: when: !enable_simplesaml && uab_sso}
+   - {role: simplesaml, tags: simplesaml, when:  enable_simplesaml}
+   - {role: simplesaml_uab_sso, tags: simplesaml_uab_sso, when: uab_sso}
