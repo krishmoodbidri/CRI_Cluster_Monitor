@@ -91,5 +91,16 @@
 # Simplesaml  related  
 
   enable_simplesaml: false
+  uab_idp: false
+  samltest_idp: false
   simplesaml_url: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
   trusted_url_domains: ''
+
+# LTS-S3 config
+  lts_access_key:  ACCESS_KEY
+  lts_secret_key: SECRET_KEY
+  s3_endpoint:  S3_ENDPOINT
+
+#S3-shib_config
+  s3_shibboleth_bucket_name: UAB_SHIB_BUCKET
+  s3_shibboleth_object_name: UAB_SHIB_OBJECT
