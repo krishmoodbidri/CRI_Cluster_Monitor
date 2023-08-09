@@ -93,14 +93,14 @@
     mode: '0644'
   loop:
     - { src: "/etc/shibboleth/uabgrid-incommon-key.pem", dest: "/etc/xdmod/simplesamlphp/cert/uabgrid-incommon-key.pem" }
-    - { src: "/etc/uabgrid-incommon-cert-2048-20yr.pem", dest: "/etc/xdmod/simplesamlphp/cert/uabgrid-incommon-cert-2048-20yr.pem" }
+    - { src: "/etc/shibboleth/uabgrid-incommon-cert-2048-20yr.pem", dest: "/etc/xdmod/simplesamlphp/cert/uabgrid-incommon-cert-2048-20yr.pem" }
     - { src: "authsources_uab_idp.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
     - { src: "saml20-idp-remote_uab_idp.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
   when: uab_idp
 
 - name: Copy config file from templates to destination
   template:
-    src: config_uab_idp.php
+    src: config.php
     dest: /etc/xdmod/simplesamlphp/config/config.php
     mode: 0644
   when: uab_idp
@@ -120,7 +120,7 @@
 
 - name: Copy config file from templates to destination
   template:
-    src: config_samltest_idp.php
+    src: config.php
     dest: /etc/xdmod/simplesamlphp/config/config.php
     mode: 0644
   when: samltest_idp
