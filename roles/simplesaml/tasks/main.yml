@@ -41,6 +41,41 @@
     - metadata
     - cert
 
+- name: Install python3 and pip3
+  yum:
+    name:
+      - python3
+      - python3-pip
+
+- name: Install require package
+  pip:
+    name: boto3
+    extra_args: "--extra-index-url https://pypi.python.org/simple"
+    executable: "/usr/bin/pip3"
+
+- name: create a shib directory in /tmp
+  file:
+    path: "/tmp/{{ s3_shibboleth_bucket_name }}"
+    state: directory
+
+- name: Download shibboleth tar from S3
+  aws_s3:
+    mode: get
+    s3_url: "{{ s3_endpoint }}"
+    bucket: "{{ s3_shibboleth_bucket_name }}"
+    object: "{{ s3_shibboleth_object_name }}"
+    dest: "/tmp/{{ s3_shibboleth_object_name }}"
+    aws_access_key: "{{ lts_access_key }}"
+    aws_secret_key: "{{ lts_secret_key }}"
+  vars:
+    ansible_python_interpreter: /usr/bin/python3
+
+- name: Extract tar.gz into /tmp/
+  unarchive:
+    src: "/tmp/{{ s3_shibboleth_object_name }}"
+    dest: "/tmp/{{ s3_shibboleth_bucket_name }}"
+    remote_src: yes
+
 - name: Copy all the cert and metadata files to appropriate destinations
   become: yes
   copy:
@@ -48,10 +83,10 @@
     dest: "{{ item.dest }}"
     mode: '0644'
   loop:
-    - { src: "saml.pem", dest: "/etc/xdmod/simplesamlphp/cert/saml.pem" }
-    - { src: "saml.crt", dest: "/etc/xdmod/simplesamlphp/cert/saml.crt" }
-    - { src: "authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
-    - { src: "saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/key.pem", dest: "/etc/xdmod/simplesamlphp/cert/key.pem" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/cert.pem", dest: "/etc/xdmod/simplesamlphp/cert/cert.pem" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
 
 - name: Copy config file from templates to destination
   template:
