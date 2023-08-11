@@ -55,7 +55,7 @@
 
 - name: create a shib directory in /tmp
   file:
-    path: /tmp/shib
+    path: "/tmp/{{ s3_shibboleth_bucket_name }}"
     state: directory
 
 - name: Download shibboleth tar from S3
@@ -70,21 +70,12 @@
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
-- name: Extract shib_conf.tar.gz into /etc/
+- name: Extract tar.gz into /tmp/
   unarchive:
     src: "/tmp/{{ s3_shibboleth_object_name }}"
-    dest: /
+    dest: "/tmp/{{ s3_shibboleth_bucket_name }}"
     remote_src: yes
 
-- name: Recursively change ownership of a /etc/shibboleth to root
-  ansible.builtin.file:
-    path: /etc/shibboleth
-    state: directory
-    recurse: yes
-    owner: root
-    group: root
-  when: uab_idp
-
 - name: Copy all the cert and metadata files to appropriate destinations
   become: yes
   copy:
@@ -92,38 +83,16 @@
     dest: "{{ item.dest }}"
     mode: '0644'
   loop:
-    - { src: "/etc/shibboleth/uabgrid-incommon-key.pem", dest: "/etc/xdmod/simplesamlphp/cert/uabgrid-incommon-key.pem" }
-    - { src: "/etc/shibboleth/uabgrid-incommon-cert-2048-20yr.pem", dest: "/etc/xdmod/simplesamlphp/cert/uabgrid-incommon-cert-2048-20yr.pem" }
-    - { src: "authsources_uab_idp.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
-    - { src: "saml20-idp-remote_uab_idp.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
-  when: uab_idp
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/key.pem", dest: "/etc/xdmod/simplesamlphp/cert/key.pem" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/cert.pem", dest: "/etc/xdmod/simplesamlphp/cert/cert.pem" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
+    - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
 
 - name: Copy config file from templates to destination
   template:
     src: config.php
     dest: /etc/xdmod/simplesamlphp/config/config.php
     mode: 0644
-  when: uab_idp
-
-- name: Copy all the cert and metadata files to appropriate destinations
-  become: yes
-  copy:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
-    mode: '0644'
-  loop:
-    - { src: "/etc/shibboleth/saml.pem", dest: "/etc/xdmod/simplesamlphp/cert/saml.pem" }
-    - { src: "/etc/shibboleth/saml.crt", dest: "/etc/xdmod/simplesamlphp/cert/saml.crt" }
-    - { src: "authsources_samltest_idp.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
-    - { src: "saml20-idp-remote_samltest_idp.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
-  when: samltest_idp
-
-- name: Copy config file from templates to destination
-  template:
-    src: config.php
-    dest: /etc/xdmod/simplesamlphp/config/config.php
-    mode: 0644
-  when: samltest_idp
 
 - name: Add [authentication] section to portal_settings.ini
   blockinfile:
