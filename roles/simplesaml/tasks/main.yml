@@ -55,25 +55,25 @@
 
 - name: create a shib directory in /tmp
   file:
-    path: "/tmp/{{ ansible_env.s3_shibboleth_bucket_name }}"
+    path: "/tmp/{{ lookup('env', 's3_shibboleth_bucket_name') }}"
     state: directory
 
 - name: Download shibboleth tar from S3
   aws_s3:
     mode: get
-    s3_url: "{{ ansible_env.s3_endpoint }}"
-    bucket: "{{ ansible_env.s3_shibboleth_bucket_name }}"
-    object: "{{ ansible_env.s3_shibboleth_object_name }}"
-    dest: "/tmp/{{ ansible_env.s3_shibboleth_object_name }}"
-    aws_access_key: "{{ ansible_env.lts_access_key }}"
-    aws_secret_key: "{{ ansible_env.lts_secret_key }}"
+    s3_url: "{{ lookup('env', 's3_endpoint') }}"
+    bucket: "{{ lookup('env', 's3_shibboleth_bucket_name') }}"
+    object: "{{ lookup('env', 's3_shibboleth_object_name') }}"
+    dest: "/tmp/{{ lookup('env', 's3_shibboleth_object_name') }}"
+    aws_access_key: "{{ lookup('env', 'lts_access_key') }}"
+    aws_secret_key: "{{ lookup('env', 'lts_secret_key') }}"
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
 - name: Extract tar.gz into /tmp/
   unarchive:
-    src: "/tmp/{{ ansible_env.s3_shibboleth_object_name }}"
-    dest: "/tmp/{{ ansible_env.s3_shibboleth_bucket_name }}"
+    src: "/tmp/{{ lookup('env', 's3_shibboleth_object_name') }}"
+    dest: "/tmp/{{ lookup('env', 's3_shibboleth_bucket_name') }}"
     remote_src: yes
 
 - name: Copy all the cert and metadata files to appropriate destinations
@@ -83,10 +83,10 @@
     dest: "{{ item.dest }}"
     mode: '0644'
   loop:
-    - { src: "/tmp/{{ ansible_env.s3_shibboleth_bucket_name }}/key.pem", dest: "/etc/xdmod/simplesamlphp/cert/key.pem" }
-    - { src: "/tmp/{{ ansible_env.s3_shibboleth_bucket_name }}/cert.pem", dest: "/etc/xdmod/simplesamlphp/cert/cert.pem" }
-    - { src: "/tmp/{{ ansible_env.s3_shibboleth_bucket_name }}/authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
-    - { src: "/tmp/{{ ansible_env.s3_shibboleth_bucket_name }}/saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
+    - { src: "/tmp/{{ lookup('env', 's3_shibboleth_bucket_name') }}/key.pem", dest: "/etc/xdmod/simplesamlphp/cert/key.pem" }
+    - { src: "/tmp/{{ lookup('env', 's3_shibboleth_bucket_name') }}/cert.pem", dest: "/etc/xdmod/simplesamlphp/cert/cert.pem" }
+    - { src: "/tmp/{{ lookup('env', 's3_shibboleth_bucket_name') }}/authsources.php", dest: "/etc/xdmod/simplesamlphp/config/authsources.php" }
+    - { src: "/tmp/{{ lookup('env', 's3_shibboleth_bucket_name') }}/saml20-idp-remote.php", dest: "/etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php" }
 
 - name: Copy config file from templates to destination
   template:
