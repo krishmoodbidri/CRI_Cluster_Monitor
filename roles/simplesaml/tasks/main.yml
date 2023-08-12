@@ -63,7 +63,7 @@
  msg:
  - "s3_endpoint: {{ lookup('env', 's3_endpoint') }}"
  - "s3_shibboleth_bucket_name: {{ lookup('env', 's3_shibboleth_bucket_name') }}"
- - "s3_shibboleth_object_name: {{ lookup('env', 's3_shibboleth_object_name') }"
+ - "s3_shibboleth_object_name: {{ lookup('env', 's3_shibboleth_object_name') }}"
 
 - name: Download shibboleth tar from S3
   aws_s3:
