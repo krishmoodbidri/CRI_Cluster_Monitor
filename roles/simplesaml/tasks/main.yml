@@ -59,7 +59,7 @@
     state: directory
 
 - name: Adding a debug step to print out the LTS env variables
-  debug:
+  ansible.builtin.debug:
     msg:
     - "s3_endpoint: {{ lookup('env', 's3_endpoint') }}"
     - "s3_shibboleth_bucket_name: {{ lookup('env', 's3_shibboleth_bucket_name') }}"
