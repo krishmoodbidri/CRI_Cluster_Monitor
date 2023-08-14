@@ -175,7 +175,7 @@ $config = [
      * Example:
      *   'trusted.url.domains' => ['sp.example.com', 'app.example.com'],
      */
-    'trusted.url.domains' => [{{ trusted_url_domains }}],
+    'trusted.url.domains' => ['{{ trusted_url_domains }}'],
 
     /*
      * Enable regular expression matching of trusted.url.domains.
@@ -554,7 +554,7 @@ $config = [
      * Example:
      *  'session.cookie.domain' => '.example.org',
      */
-    'session.cookie.domain' => {{ trusted_url_domains }},
+    'session.cookie.domain' => '{{ trusted_url_domains }}',
 
     /*
      * Set the secure flag in the cookie.
@@ -805,7 +805,7 @@ $config = [
      * Options to override the default settings for the language cookie
      */
     'language.cookie.name' => 'language',
-    'language.cookie.domain' => {{ trusted_url_domains }},
+    'language.cookie.domain' => '{{ trusted_url_domains }}',
     'language.cookie.path' => '/',
     'language.cookie.secure' => true,
     'language.cookie.httponly' => false,
