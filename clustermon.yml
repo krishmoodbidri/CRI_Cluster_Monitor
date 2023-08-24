@@ -10,4 +10,4 @@
      - {role: openssl_cert_gen, tags: openssl_cert_gen, when: openssl_cert_gen}
      - {role: supremm, tags: supremm, when: enable_supremm}
      - {role: simplesaml, tags: simplesaml, when: enable_simplesaml}
-     - {role: customize_template, tags: customize_template}
+     - {role: customize_template, tags: customize_template, when: enable_UAB_UI}
