@@ -1,0 +1,7 @@
+---
+- name: Edit UAB Idp metadata file to replace OrganizationName value to UAB Central Authentication System
+  become: yes
+  replace:
+    path: /etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php
+    regexp: "('OrganizationName' =>\\s*array \\(\\s*'en' =>\\s*')University of Alabama at Birmingham(',\\s*\\))"
+    replace: "\\1UAB Central Authentication System\\2"
