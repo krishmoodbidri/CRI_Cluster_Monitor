@@ -7,7 +7,7 @@
     replace: "\\1UAB Central Authentication System\\2"
 
 - name: Copy UAB logo to /gui/images
-  template:
+  copy:
     src: logo.png
     dest: /gui/images/uab-logo.png
 
