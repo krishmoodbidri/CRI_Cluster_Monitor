@@ -5,3 +5,15 @@
     path: /etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php
     regexp: "('OrganizationName' =>\\s*array \\(\\s*'en' =>\\s*')University of Alabama at Birmingham(',\\s*\\))"
     replace: "\\1UAB Central Authentication System\\2"
+
+- name: Copy UAB logo to /gui/images
+  template:
+    src: logo.png
+    dest: /gui/images/uab-logo.png
+
+- name: Edit UAB idp metadata to add uab-logo
+  become: yes
+  replace:
+    path: /etc/xdmod/simplesamlphp/metadata/saml20-idp-remote.php
+    regexp: "('scope' =>\\s*array \\(\\s*0 =>\\s*'uab.edu',\\s*\\))"
+    replace: "\\1), 'icon' => '/gui/images/uab-logo.png',"
