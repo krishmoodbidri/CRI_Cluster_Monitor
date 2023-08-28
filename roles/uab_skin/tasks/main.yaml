@@ -75,14 +75,14 @@
   replace:
     path: /etc/httpd/conf.d/xdmod.conf
     regexp: '(SSLCertificateFile ).*'
-    replace: "\1/etc/pki/tls/certs/xdmod.rc.uab.edu-2048-incommon-cert.crt"
+    replace: "    SSLCertificateFile /etc/pki/tls/certs/xdmod.rc.uab.edu-2048-incommon-cert.crt"
 
 - name: Replace the apache config values for key
   become: yes
   replace:
     path: /etc/httpd/conf.d/xdmod.conf
     regexp: '(SSLCertificateKeyFile ).*'
-    replace: "\1/etc/pki/tls/private/xdmod.rc.uab.edu-2048.key"
+    replace: "    SSLCertificateKeyFile /etc/pki/tls/private/xdmod.rc.uab.edu-2048.key"
 
 - name: Add config for interm cert
   become: yes
