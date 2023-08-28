@@ -87,7 +87,7 @@
 - name: Add config for interm cert
   become: yes
   lineinfile:
-    path: /etc/httpd/conf/xdmod.conf
+    path: /etc/httpd/conf.d/xdmod.conf
     insertafter: '(SSLCertificateKeyFile ).*'
     line: '    SSLCertificateChainFile /etc/ssl/certs/xdmod.rc.uab.edu-2048-incommon-interm.crt'
     state: present
