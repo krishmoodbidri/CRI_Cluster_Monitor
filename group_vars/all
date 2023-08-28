@@ -93,6 +93,7 @@
   enable_simplesaml: true
   simplesaml_url: https://github.com/simplesamlphp/simplesamlphp/releases/download/v1.19.7/simplesamlphp-1.19.7.tar.gz
   trusted_url_domains: ''
+  enable_UAB_UI: false
 
 # LTS-S3 config
   lts_access_key:  ACCESS_KEY
