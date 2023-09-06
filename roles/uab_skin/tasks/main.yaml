@@ -91,5 +91,11 @@
     insertafter: '(SSLCertificateKeyFile ).*'
     line: '    SSLCertificateChainFile /etc/ssl/certs/xdmod.rc.uab.edu-2048-incommon-interm.crt'
     state: present
+
+- name: Restart httpd service
+  become: true
+  systemd:
+    name: httpd.service
+    state: restarted
   
 
