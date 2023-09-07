@@ -138,7 +138,13 @@
    when: group_to_hierarchy_file_path is defined and group_to_hierarchy_file_path != ""
 
  - name: Run ingestor to ingest hierarchies into the tables
-   command: xdmod-ingestor --last-modified-start-date "{{ ansible_date_time.date }}" 
+   command: xdmod-ingestor --last-modified-start-date "{{ ansible_date_time.date }}"
+
+ - name: Copy sacct log file to destination for crontab
+   ansible.builtin.copy:
+     src: slurm-cluster.log
+     dest: "{{ sacct_log_file_path }}"
+     mode: '0644'
 
  - name: shred slurm records
    command: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}" 
@@ -151,7 +157,7 @@
      hour: 0
      minute: 10
      state: present
-     job: "sacct --allusers --parsable2 --noheader --allocations --duplicates --clusters {{ slurm_cluster_name }} --format jobid,jobidraw,cluster,partition,account,group,gid,user,uid,submit,eligible,start,end,elapsed,exitcode,state,nnodes,ncpus,reqcpus,reqmem,reqtres,alloctres,timelimit,nodelist,jobname --starttime {{ xdmod_shredder_start_time }} --end-time {{ xdmod_shredder_end_time }} > {{ sacct_log_file_path }} && xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}"
+     job: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}"
    when: enable_supremm == false
 
  - name: create xdmod ingestor cron job
