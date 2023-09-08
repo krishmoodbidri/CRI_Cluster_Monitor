@@ -154,18 +154,10 @@
 
  - name: create xdmod shred cron job
    cron:
-     hour: 0
-     minute: 10
+     name: xdmod-data-ingestion
+     minute: "*/15"
      state: present
-     job: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}"
-   when: enable_supremm == false
-
- - name: create xdmod ingestor cron job
-   cron:
-     hour: 0
-     minute: 30
-     state: present
-     job: "xdmod-ingestor --start-date {{ xdmod_ingestor_start_date }} --end-date {{ xdmod_ingestor_end_date }}"
+     job: "sleep 60 && sudo /bin/xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }} && sudo /bin/xdmod-ingestor --start-date `date +'\%F'` --end-date `date -d 'next day' +'\%F'`"
    when: enable_supremm == false
 
  - name: reload httpd
