@@ -38,6 +38,7 @@
   xdmod_ingestor_start_date: "date +'\\%F'"
   xdmod_ingestor_end_date: "date -d 'next day' +'\\%F'"
 
+  xdmod_min_username_length: 2
   sacct_log_file_path: ""
 
 # SUPReMM

@@ -92,6 +92,14 @@
     line: '    SSLCertificateChainFile /etc/ssl/certs/xdmod.rc.uab.edu-2048-incommon-interm.crt'
     state: present
 
+- name: Replace constant in constants.php
+  become: yes
+  replace:
+    path: /usr/share/xdmod/configuration/constants.php
+    regexp: "(define\\('RESTRICTION_USERNAME[^{]*{)\\d(.*)$"
+    replace: "\\g<1>{{xdmod_min_username_length}}\\g<2>"
+    backup: true
+
 - name: Restart httpd service
   become: true
   systemd:
