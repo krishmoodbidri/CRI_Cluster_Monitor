@@ -97,7 +97,7 @@
   replace:
     path: /usr/share/xdmod/configuration/constants.php
     regexp: "(define\\('RESTRICTION_USERNAME[^{]*{)\\d(.*)$"
-    replace: "\\1 {{xdmod_min_username_length}}\\2"
+    replace: "\\g<1>{{xdmod_min_username_length}}\\g<2>"
     backup: true
 
 - name: Restart httpd service
