@@ -150,14 +150,26 @@
    command: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}" 
 
  - name: ingest slurm records
-   command: xdmod-ingestor
+
+ - name: Create directories for data ingestion
+   ansible.builtin.file:
+     path: "{{ item.value }}"
+     state: directory
+     mode: '0755'
+   loop: "{{ data-ingestion-queues | dict2items }}"
+
+ - name: copy data-ingestion script for crontab
+   ansible.builtin.template:
+     src: data-ingestion.sh.j2
+     dest: "{{ data_ingestion_wrapper_path }}"
+     mode: '0744'
 
  - name: create xdmod shred cron job
    cron:
      name: xdmod-data-ingestion
      minute: "*/{{ xdmod_cron_freq }}"
      state: present
-     job: "sleep 60 && sudo /bin/xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }} && sudo /bin/xdmod-ingestor `{{ xdmod_ingestor_start_date }}` --end-date `{{ xdmod_ingestor_end_date }}`"
+     job: "{{ data_ingestion_wrapper_path }}"
    when: enable_supremm == false
 
  - name: reload httpd
