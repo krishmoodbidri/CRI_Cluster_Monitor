@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# From man page of flock(1) --> This is useful boilerplate code for shell scripts.  Put it at the top of the shell script you want to lock and it'll automatically lock itself on the first run.  If the env var $FLOCKER is not set to the shell script that is being  run,  then execute flock and grab an exclusive non-blocking lock (using the script itself as the lock file) before re-execing itself with the right arguments.  It also sets the FLOCKER env var to the right value so it doesn't run again.
+
+[ "${FLOCKER}" != "$0" ] && exec env FLOCKER="$0" flock -n "$0" "$0" "$@" || :
+
+input_dir="{{ input_dir }}"
+done_dir="{{ done_dir }}"
+
+for each_file in "$input_dir"/*; do
+      sudo /usr/bin/xdmod-shredder -r ohpc -f slurm -i $each_file && sudo /usr/bin/xdmod-ingestor --start-date `date +'%F'` --end-date `date -d 'next day' +'%F'`
+        if [ $? -eq 0 ]; then
+          # Move file on succesful ingestion
+          echo "moving file $each_file to $done_dir"
+	  filename=$(basename "$each_file")
+          mv $each_file "$done_dir/$filename.done"
+        else
+          echo "File ingestion failed:" #some error handling here.
+        fi
+done
+
