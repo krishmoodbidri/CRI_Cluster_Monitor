@@ -150,6 +150,7 @@
    command: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}" 
 
  - name: ingest slurm records
+   command: "xdmod-ingestor --start-date `{{ xdmod_ingestor_start_date }}` --end-date `{{ xdmod_ingestor_end_date }}`"
 
  - name: Create directories for data ingestion
    ansible.builtin.file:
