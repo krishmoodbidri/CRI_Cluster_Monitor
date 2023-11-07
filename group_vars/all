@@ -33,10 +33,6 @@
   xdmod_db_pass: ""
 
   xdmod_cron_freq: "15"
-  xdmod_shredder_start_time: "date +'\\%FT\\%T' -d '{{ xdmod_cron_freq }} minutes ago'"
-  xdmod_shredder_end_time: "date +'\\%FT\\%T'"
-  xdmod_ingestor_start_date: "date +'\\%F'"
-  xdmod_ingestor_end_date: "date -d 'next day' +'\\%F'"
 
   xdmod_min_username_length: 2
   sacct_log_file_path: ""

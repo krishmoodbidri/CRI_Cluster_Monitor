@@ -149,8 +149,22 @@
  - name: shred slurm records
    command: "xdmod-shredder -r {{ slurm_cluster_name }} -f slurm -i {{ sacct_log_file_path }}" 
 
+ - name: System date for today
+   shell: "date +%F"
+   register: cur_date
+
+ - name: System date for tomorrow
+   shell: "date -d 'next day' +'%F'"
+   register: tom_date
+
+ - name: Set variables
+   set_fact:
+     xdmod_ingestor_start_date : "{{ cur_date.stdout[0:10] }}"
+     xdmod_ingestor_end_date: "{{ cur_date.stdout[0:10] }}"
+
  - name: ingest slurm records
-   command: "xdmod-ingestor --start-date `{{ xdmod_ingestor_start_date }}` --end-date `{{ xdmod_ingestor_end_date }}`"
+   command: "xdmod-ingestor --start-date {{ xdmod_ingestor_start_date }} --end-date {{ xdmod_ingestor_end_date }}"
+
 
  - name: Create directories for data ingestion
    ansible.builtin.file:
