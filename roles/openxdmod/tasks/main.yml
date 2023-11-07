@@ -165,13 +165,17 @@
  - name: ingest slurm records
    command: "xdmod-ingestor --start-date {{ xdmod_ingestor_start_date }} --end-date {{ xdmod_ingestor_end_date }}"
 
-
- - name: Create directories for data ingestion
+ - name: Create input directory for data ingestion
    ansible.builtin.file:
-     path: "{{ item.value }}"
+     path: "{{ input_dir }}"
      state: directory
      mode: '0755'
-   loop: "{{ data-ingestion-queues | dict2items }}"
+
+ - name: Create directory for confirming data ingestion
+   ansible.builtin.file:
+     path: "{{ done_dir }}"
+     state: directory
+     mode: '0755'
 
  - name: copy data-ingestion script for crontab
    ansible.builtin.template:

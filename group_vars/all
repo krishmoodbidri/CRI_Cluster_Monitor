@@ -102,7 +102,6 @@
   s3_shibboleth_object_name: IDP_OBJECT
 
 #Data ingestion
-  data-ingestion-queues:
-    input_dir: "/data/xdmod/queues/input_queue"
-    done_dir: "/data/xdmod/queues/done_queue"
+  input_dir: "/data/xdmod/queues/input_queue"
+  done_dir: "/data/xdmod/queues/done_queue"
   data_ingestion_wrapper_path: "/opt/data-ingestion.sh"
