@@ -140,6 +140,12 @@
  - name: Run ingestor to ingest hierarchies into the tables
    command: xdmod-ingestor --last-modified-start-date "{{ ansible_date_time.date }}"
 
+ - name: Create directory for sact log file
+   ansible.builtin.file:
+     path: "{{ sacct_log_file_path }}"
+     state: directory
+     mode: '0755'
+
  - name: Copy sacct log file to destination for crontab
    ansible.builtin.copy:
      src: slurm-cluster.log
