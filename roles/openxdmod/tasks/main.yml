@@ -142,7 +142,7 @@
 
  - name: Create directory for sact log file
    ansible.builtin.file:
-     path: "{{ sacct_log_file_path }}"
+     path: "{{ input_dir }}"
      state: directory
      mode: '0755'
 

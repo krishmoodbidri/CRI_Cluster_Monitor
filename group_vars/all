@@ -35,7 +35,6 @@
   xdmod_cron_freq: "15"
 
   xdmod_min_username_length: 2
-  sacct_log_file_path: ""
 
 # SUPReMM
 
@@ -105,3 +104,4 @@
   input_dir: "/data/xdmod/queues/input_queue"
   done_dir: "/data/xdmod/queues/done_queue"
   data_ingestion_wrapper_path: "/opt/data-ingestion.sh"
+  sacct_log_file_path: "{{ input_dir }}/slurm_cluster.log"
