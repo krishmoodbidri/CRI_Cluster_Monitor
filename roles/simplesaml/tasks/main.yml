@@ -89,6 +89,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: '0644'
+    remote_src: yes
   loop:
     - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/key.pem", dest: "/etc/xdmod/simplesamlphp/cert/key.pem" }
     - { src: "/tmp/{{ s3_shibboleth_bucket_name }}/cert.pem", dest: "/etc/xdmod/simplesamlphp/cert/cert.pem" }
