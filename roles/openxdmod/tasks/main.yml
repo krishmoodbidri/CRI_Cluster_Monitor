@@ -90,15 +90,24 @@
      dest: /usr/share/xdmod/tools/dev/extract_chart_configs.php
      mode: '0744'
 
+ - name: Find the DB schema files so that they can be initialized in the next step
+   ansible.builtin.find:
+     paths: "{{ item }}"
+     file_type: file
+     patterns: '\w+.sql$'
+     use_regex: yes
+   loop:
+     - /usr/share/xdmod/db/schema
+     - /usr/share/xdmod/db/data
+   register: output
+
 #Need to initialize databases still
  - name: initialize xdmod databases
    mysql_db:
      name: "{{ item | basename | regex_replace('.sql','') }}"
      state: import
      target: "{{ item }}"
-   with_fileglob:
-     - /usr/share/xdmod/db/schema/*
-     - /usr/share/xdmod/db/data/*
+   loop: "{{ output | json_query('results[*].files[*].path') | flatten(levels=1) }}"
 
  - name: create db user
    mysql_user:
