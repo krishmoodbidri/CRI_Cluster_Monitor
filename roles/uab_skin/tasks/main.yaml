@@ -65,6 +65,7 @@
     src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     mode: '0644'
+    remote_src: yes
   loop:
     - { src: "/tmp/cert/xdmod.rc.uab.edu-2048-incommon-cert.crt", dest: "/etc/pki/tls/certs/xdmod.rc.uab.edu-2048-incommon-cert.crt" }
     - { src: "/tmp/cert/xdmod.rc.uab.edu-2048-incommon-interm.crt", dest: "/etc/pki/tls/certs/xdmod.rc.uab.edu-2048-incommon-interm.crt" }
