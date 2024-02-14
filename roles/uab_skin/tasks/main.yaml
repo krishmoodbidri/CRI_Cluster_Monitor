@@ -37,25 +37,25 @@
 - name: Adding a debug step to print out the LTS env variables
   ansible.builtin.debug:
     msg:
-    - "s3_endpoint: {{ lookup('env', 's3_endpoint') }}"
-    - "s3_shibboleth_bucket_name: {{ lookup('env', 's3_shibboleth_bucket_name') }}"
-    - "s3_shibboleth_object_name: {{ lookup('env', 's3_cert_object_name') }}"
+    - "s3_endpoint: {{ s3_endpoint }}"
+    - "s3_shibboleth_bucket_name: {{ s3_shibboleth_bucket_name }}"
+    - "s3_shibboleth_object_name: {{ s3_cert_object_name }}"
 
 - name: Download cert tar from S3
   aws_s3:
     mode: get
-    s3_url: "{{ lookup('env', 's3_endpoint') }}"
-    bucket: "{{ lookup('env', 's3_shibboleth_bucket_name') }}"
-    object: "{{ lookup('env', 's3_cert_object_name') }}"
-    dest: "/tmp/{{ lookup('env', 's3_cert_object_name') }}"
-    aws_access_key: "{{ lookup('env', 'lts_access_key') }}"
-    aws_secret_key: "{{ lookup('env', 'lts_secret_key') }}"
+    s3_url: "{{ s3_endpoint }}"
+    bucket: "{{ s3_shibboleth_bucket_name }}"
+    object: "{{ s3_cert_object_name }}"
+    dest: "/tmp/{{ s3_cert_object_name }}"
+    aws_access_key: "{{ lts_access_key }}"
+    aws_secret_key: "{{ lts_secret_key }}"
   vars:
     ansible_python_interpreter: /usr/bin/python3
 
 - name: Extract tar.gz into /tmp/cert
   unarchive:
-    src: "/tmp/{{ lookup('env', 's3_cert_object_name') }}"
+    src: "/tmp/{{ s3_cert_object_name }}"
     dest: "/tmp/cert"
     remote_src: yes
 
