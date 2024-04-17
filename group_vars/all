@@ -101,7 +101,8 @@
   s3_shibboleth_object_name: IDP_OBJECT
 
 #Data ingestion
-  input_dir: "/data/xdmod/queues/input_queue"
-  done_dir: "/data/xdmod/queues/done_queue"
+  ingestion_dir: "/data/xdmod/queues"
+  input_dir: "{{ingestion_dir}}/input_queue"
+  done_dir: "{{ingestion_dir}}/done_queue"
   data_ingestion_wrapper_path: "/opt/data-ingestion.sh"
   sacct_log_file_path: "{{ input_dir }}/slurm_cluster.log"

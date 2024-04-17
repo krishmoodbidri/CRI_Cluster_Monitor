@@ -208,3 +208,13 @@
  - name: reload httpd
    service: name=httpd state=restarted enabled=yes
 
+ - name: Set up mount point for external volumes in fstab
+   ansible.posix.mount:
+     path: "{{ item.path }}"
+     src: "{{ item.src }}"
+     fstype: "{{ item.fstype }}"
+     opts: "{{ item.opts }}"
+     state: present
+   loop:
+     - { path: /var/lib/mysql, src: "/dev/vdb1", fstype: auto, opts: defaults" }
+     - { path: /data/xdmod/queues, src: "/dev/vdc1", fstype: auto, opts: defaults" }
